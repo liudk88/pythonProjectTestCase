@@ -48,16 +48,16 @@ sysname=common.getNewSysName()
 todo("xiangdk","运维部审批",{"DEAL_OPT":"拟同意","nextStep": "serverGrant"})
 todo("zhongxq","运维部审批",{"DEAL_OPT":"拟同意","nextStep": "serverGrant"})
 todo("xuyl","运维部审批",{"DEAL_OPT":"拟同意","nextStep": "serverGrant"})
-# todo("xuyl","服务器资源发放",{"DEAL_OPT":"服务器资源已发放","nextStep": "dbGrant","REAL_SYS_NAME": sysname,"SYS_TYPE": "1"})
+todo("xuyl","服务器资源发放",{"DEAL_OPT":"服务器资源已发放","nextStep": "dbGrant","REAL_SYS_NAME": sysname,"SYS_TYPE": "1"})
 
 # 测试有生成信息系统，当前只验证存在即可
 sysData=common.getSystemByName(sysname)
 # 正式资源申请的时候测试自动带出
 dbname=common.getNewDbName()
 
-# todo("zhongxq","数据库资源发放",{"DEAL_OPT":"数据库资源已发放","nextStep": "appGrant","DB_USER":dbname})
-# todo("xiangdk","应用资源发放",{"DEAL_OPT":"应用资源已发放","nextStep": "nodeConfirm"})
-# todo("liudk","资源确认",{"DEAL_OPT":"确认成功","nextStep": "endEvent"})
+todo("zhongxq","数据库资源发放",{"DEAL_OPT":"数据库资源已发放","nextStep": "appGrant","DB_USER":dbname})
+todo("xiangdk","应用资源发放",{"DEAL_OPT":"应用资源已发放","nextStep": "nodeConfirm"})
+todo("liudk","资源确认",{"DEAL_OPT":"确认成功","nextStep": "endEvent"})
 
 
 

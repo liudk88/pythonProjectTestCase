@@ -27,7 +27,7 @@ def login(username,password):
         "remember": "true",
         "key":"d8a49423-47dd-4dc8-97b0-22cbc0796266"
     }
-    req=requests.post(url=url,json=data)
+    req=requests.post(url=url,json=data,verify = False)
     access_token=req.json()['data']['access_token']
     headers = {"Authorization":access_token}
     return headers

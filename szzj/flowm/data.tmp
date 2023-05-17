@@ -8,3 +8,15 @@
   "update_flowSeq" : "2023030700013",
   "timeSleep" : 0
 }
+
+
+{
+  "domain" : "https://zjjtest.sz.gov.cn/itom/nisg",
+  "liudk_access_token" : "2c2b7000-3efb-439c-a903-84ae388b8642",
+  "testResource_flowSeq" : "2023030700005",
+  "resource_flowSeq" : "2023030700002",
+  "goOnline_flowSeq" : "2023030700003",
+  "dbUpdate_flowSeq" : "2023030900001",
+  "update_flowSeq" : "2023030700013",
+  "timeSleep" : 10
+}
