@@ -1,5 +1,5 @@
 {
-  "domain" : "https://zjjtest.sz.gov.cn/itom/nisg",
+  "domain" : "http://localhost:9031/api",
   "liudk_access_token" : "2c2b7000-3efb-439c-a903-84ae388b8642",
   "testResource_flowSeq" : "2023030700005",
   "resource_flowSeq" : "2023030700002",
@@ -8,4 +8,3 @@
   "update_flowSeq" : "2023030700013",
   "timeSleep" : 0
 }
-
