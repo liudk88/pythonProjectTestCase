@@ -1,10 +1,10 @@
 {
-  "domain" : "http://localhost:9031/api",
+  "domain" : "http://localhost:9031/nisg",
   "liudk_access_token" : "23b64505-0473-42f4-b950-5f01a760060a",
   "testResource_flowSeq" : "2023051700001",
   "resource_flowSeq" : "2023051700002",
   "goOnline_flowSeq" : "2023051700003",
   "dbUpdate_flowSeq" : "2023051700004",
-  "update_flowSeq" : "2023051700005",
+  "update_flowSeq" : "2023072800001",
   "timeSleep" : 0
 }
