@@ -13,9 +13,12 @@ def initSqlFiles(preFileName,finFileName):
     finPath = os.getcwd() + "/tmp/"+finFileName
     shutil.copy(prePath,finPath)
 
-sysname=common.getNewSysName()
+# sysname=common.getNewSysName()
+# 单独测试上线流程，指定系统名称
+sysname="XC-运维管理平台";
 sysData=common.getSystemByName(sysname)
-dbname=common.getNewDbName()
+# dbname=common.getNewDbName()
+dbname="itom"
 dbData=common.getDbByName(dbname)
 
 # 上传数据库更新sql

@@ -1,22 +1,27 @@
 {
-  "domain" : "http://localhost:9031/api",
+  "domain" : "http://localhost:9031/nisg",
+  "commonPwd" : "SGN4YTIwMTkh",
   "liudk_access_token" : "2c2b7000-3efb-439c-a903-84ae388b8642",
   "testResource_flowSeq" : "2023030700005",
   "resource_flowSeq" : "2023030700002",
   "goOnline_flowSeq" : "2023030700003",
   "dbUpdate_flowSeq" : "2023030900001",
   "update_flowSeq" : "2023030700013",
+  "configUpdate_flowSeq" : "2024022100012",
   "timeSleep" : 0
 }
 
 
 {
   "domain" : "https://zjjtest.sz.gov.cn/itom/nisg",
-  "liudk_access_token" : "2c2b7000-3efb-439c-a903-84ae388b8642",
-  "testResource_flowSeq" : "2023030700005",
-  "resource_flowSeq" : "2023030700002",
-  "goOnline_flowSeq" : "2023030700003",
-  "dbUpdate_flowSeq" : "2023030900001",
-  "update_flowSeq" : "2023030700013",
-  "timeSleep" : 10
+  "commonPwd" : "c3p6akAyMDIy",
+  "liudk_access_token" : "6185a9de-72a6-4ede-acab-3b83cc4e9e4c",
+  "testResource_flowSeq" : "2024022100008",
+  "resource_flowSeq" : "2024022100009",
+  "goOnline_flowSeq" : "2024022100006",
+  "dbUpdate_flowSeq" : "2024022100007",
+  "update_flowSeq" : "2024022100010",
+  "offline_flowSeq" : "2024022100011",
+  "configUpdate_flowSeq" : "2024022100012",
+  "timeSleep" : 1
 }

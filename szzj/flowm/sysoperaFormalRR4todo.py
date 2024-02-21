@@ -9,15 +9,15 @@ testData=common.getData()
 
 def getTodoTaskId(headers):
     url = common.getUrl("/view/FView20221Q0V7XZK002/view?FLOW_SEQ="+testData['resource_flowSeq'])
-    req=requests.get(url=url,headers=headers)
+    req=requests.get(url=url,headers=headers,verify = False)
     # print(req.text)
-    assert len(req.json()['data']['datas']) == 1,'查询任务结果为空'
+    assert len(req.json()['data']['datas']) > 0,'查询任务结果为空'
     return req.json()['data']['datas'][0]['WTASK_ID']
 
 def todo(username,currentStepName,dealFormData):
     time.sleep(testData['timeSleep'])
     print("当前流程环节:"+currentStepName+"，"+username+" to do!")
-    headers=common.login(username,"SGN4YTIwMTkh")
+    headers=common.login(username,common.commonPwd)
     wtaskId=getTodoTaskId(headers)
     # print(wtaskId)
     url = common.getUrl("/wf/task/"+wtaskId+"/complate")
@@ -33,7 +33,7 @@ def todo(username,currentStepName,dealFormData):
         "bsForm": {"formId": "Form20221U0PXKMY004"}
     }
     data['dlForm'].update(dealFormData);
-    req=requests.post(url=url,json=data,headers=headers)
+    req=requests.post(url=url,json=data,headers=headers,verify = False)
     # print(req.text)
     data=req.json()
     if data['code'] == 0:

@@ -66,7 +66,7 @@ def post_file_request(url,fileToken,file_path):
         if url not in [None, ""]:
             if url.startswith("http") or url.startswith("https"):
                 files = {'file': open(file_path, 'rb')}
-                res = requests.post(url,headers=headers, files=files, data=data)
+                res = requests.post(url,headers=headers, files=files, data=data,verify = False)
                 return {"code": 0, "res": res}
 
 def down_file(url,params,fileName):
@@ -77,7 +77,7 @@ def down_file(url,params,fileName):
 
 def post_asset(assetType,postData):
     url = getUrl("/form/AssetForm-"+assetType)
-    req=requests.post(url=url,json=postData,headers=headers)
+    req=requests.post(url=url,json=postData,headers=headers,verify = False)
     print(req.text)
     data=req.json()
     if data['code'] == 0:

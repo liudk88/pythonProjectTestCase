@@ -9,6 +9,8 @@ testData=common.getData()
 print('==> test apply Resource <===')
 
 sysname=common.getNewSysName()
+# 单独测试上线流程，指定系统名称
+# sysname="XC-运维管理平台";
 sysData=common.getSystemByName(sysname)
 
 url = common.getUrl("/wf/sysoperaFormalRR/startProcess")
@@ -58,7 +60,7 @@ data = {
     "nextStep": "operaAudit",
     "bsFormId": "Form20221U0PXKMY004"
 }
-req=requests.post(url=url,json=data,headers=common.headers)
+req=requests.post(url=url,json=data,headers=common.headers,verify = False)
 print(req.text)
 data=req.json()
 if data['code'] == 0:

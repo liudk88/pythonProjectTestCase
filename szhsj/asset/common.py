@@ -54,7 +54,7 @@ def login(username,password):
 def getSystemByName(sysname):
     headers=login("admin","SGN4YTIwMTkh")
     url = getUrl("/view/AssetView-BS/view?flag=1&SYS_NAME="+sysname)
-    req=requests.get(url=url,headers=headers)
+    req=requests.get(url=url,headers=headers,verify = False)
     assert len(req.json()['data']['datas'])==1,('没有找到信息系统:'+sysname)
     return req.json()['data']['datas'][0]
 
@@ -71,7 +71,7 @@ def post_file_request(url,fileToken,file_path):
 
 def down_file(url,params,fileName):
     url=getUrl(url)
-    req=requests.get(url=url,params=params,headers=headers)
+    req=requests.get(url=url,params=params,headers=headers,verify = False)
     with open(fileName, "wb") as code:
         code.write(req.content)
 

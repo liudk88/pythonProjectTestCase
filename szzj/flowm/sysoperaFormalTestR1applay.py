@@ -52,7 +52,7 @@ data = {
     "nextStep": "operaAudit",
     "bsFormId": "Form20221U0P5KWR002"
 }
-req=requests.post(url=url,json=data,headers=common.headers)
+req=requests.post(url=url,json=data,headers=common.headers,verify = False)
 print(req.text)
 data=req.json()
 if data['code'] == 0:

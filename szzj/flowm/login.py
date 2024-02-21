@@ -9,6 +9,8 @@ def getUrl(uri):
 print('==> test login system <===')
 
 # headers=common.login("admin","SGN4YTIwMTkh")
-headers=common.login("liudk","SGN4YTIwMTkh")
+# headers=common.login("liudk","SGN4YTIwMTkh")
+headers=common.login("liudk","c3p6akAyMDIy")
 print(headers)
+
 

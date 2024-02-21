@@ -9,7 +9,7 @@ def assetOverview():
         # "assetId":333
     }
     url = common.getUrl("/assetOverview/index")
-    req=requests.get(url=url,params=params,headers=headers)
+    req=requests.get(url=url,params=params,headers=headers,verify = False)
     dimensions=req.json()['data']['dimensions']
     # 验证dimensions在集合[{'id': 'organization', 'label': '组织机构'}, {'id': 'machineRoom', 'label': '机房'}, {'id': 'securityDomain', 'label': '安全域'}]里
     print(dimensions)
