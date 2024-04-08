@@ -202,4 +202,12 @@ def jprint(jsonData):
     formatted_json = json.dumps(jsonData, indent=2, ensure_ascii=False)
     print(formatted_json)
 
+# charset参数可以限制文件编码格式
+def post_file_req(url,fileDatas,data):
+    res = requests.post(g.domain+url,headers=headers, files=fileDatas, data=data)
+    print("返回信息：")
+    jprint(res.json())
+    return res
+
+
 

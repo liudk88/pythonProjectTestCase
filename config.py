@@ -1,6 +1,6 @@
 domain="http://localhost:9031/nisg"
 # domain="http://192.168.99.59:8400/nisg"
-access_token="cb31ea34-1511-46b2-9d41-fcabe3fab9b5"
+access_token="faf88d0c-79db-4d39-9c10-c8c35c2c1b49"
 
 # 提供修改当前配置参数的方法
 def put(paramName,value):

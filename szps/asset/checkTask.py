@@ -1,30 +1,26 @@
-import common
-import requests
+import sys
+sys.path.append("../..")
+import common as c
 
 def assetOverview():
-    headers = {
-        "Authorization":common.testData['access_token']
-    }
-    params = {
-        "query.taskNameLike":"K00032"
-    }
-    url = common.getUrl("/ass/check/task")
-    req=requests.get(url=url,params=params,headers=headers)
-    records=req.json()['data']['records']
-    print(records)
+    query={"query.taskNameLike":"K00032"}
+    query={}
+    c.pget("/ass/check/task",query)
 
-def rfidCheck():
-    headers = {
-        "Authorization":common.testData['access_token']
-    }
-    params = {"UHF_data":[{"id":0, "epc":"TG-201703242020059xx","count":14, "rssi":-53}, {"id":1, "epc":"abc1000000000219312e3051xx", "count":7, "rssi":-72}]};
+def rfidCheckOnline():
+    params = {"UHF_data":[{"id":0, "epc":"TG-200906309030001","count":14, "rssi":-53}, {"id":1, "epc":"abc1000000000219312e3051xx", "count":7, "rssi":-72}]};
+    c.ppost("/ass/rfid/outterCheck",params)
 
-    url = common.getUrl("/ass/rfid/outterCheck")
-    print(url)
-    req=requests.post(url=url,json=params,headers=headers)
-    records=req.json()['data']
-    print(records)
+def rfidCheckOffline():
+    files = {'excelFile': open("rfidReport.xls", 'rb')}
+    c.post_file_req('/ass/rfid/5749489507442688/imp',files,{})
 
 
-#assetOverview()
-rfidCheck()
+# assetOverview()
+
+#rfid在线盘点
+# rfidCheckOnline()
+
+
+#rfid离线盘点
+rfidCheckOffline()

@@ -55,7 +55,7 @@ if(len(args) == 0):
     args.append("assetCheckOrgCheck")
     # args.append("publishScope")
 
-
+args[0]='4'
 
 
 if len(args)==0:
