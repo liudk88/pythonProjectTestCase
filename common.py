@@ -39,12 +39,6 @@ def post_file_request(url,fileToken,file_path):
                 res = requests.post(url,headers=headers, files=files, data=data)
                 return {"code": 0, "res": res}
 
-def down_file(url,params,fileName):
-    url=getUrl(url)
-    req=requests.get(url=url,params=params,headers=headers)
-    with open(fileName, "wb") as code:
-        code.write(req.content)
-
 def post_asset(assetType,postData):
     url = getUrl("/form/AssetForm-"+assetType)
     req=requests.post(url=url,json=postData,headers=headers)
@@ -153,30 +147,32 @@ def printTable(jobj,printTitle,level):
 
 
 # -- begin 重新封装get请求
-def get(url,params):
+def get(url,params={}):
     print("请求地址： "+url)
     return requests.get(url=g.domain+url,params=params,headers=headers,verify = False)
 
-def get(url):
-    print("请求地址： "+url)
-    return requests.get(url=g.domain+url,headers=headers,verify = False)
+# def get(url):
+#     print("请求地址： "+url)
+#     return requests.get(url=g.domain+url,headers=headers,verify = False)
 
 def post(url,params):
     print("请求地址： "+url)
     return requests.post(url=g.domain+url,json=params,headers=headers,verify = False)
 # 以formData的方式提交参数
 def postf(url,params):
+    print("请求地址： "+url)
     return requests.post(url=g.domain+url,data=params,headers=headers,verify = False)
 
 #--
-def pget(url,params):
-    res=get(url,params)
-    jprint(res.json())
-    return res
+# def pget(url):
+#     res=get(url)
+#     print("返回信息：")
+#     jprint(res.json())
+#     printTable(res.json(),"1",0)
+#     return res
 
-def pget(url):
-    res=get(url)
-    print("返回信息：")
+def pget(url,params={}):
+    res=get(url,params)
     jprint(res.json())
     printTable(res.json(),"1",0)
     return res
@@ -209,5 +205,23 @@ def post_file_req(url,fileDatas,data):
     jprint(res.json())
     return res
 
+#下载文件方法
+def downLoad(url,saveDir,params={}):
+    r=get(url,params)
+    with open(saveDir,"wb") as code:
+        code.write(r.content)
+
+# 提供修改文件参数的方法
+def put(pyFile,paramName,value):
+    with open(pyFile, 'r') as file:
+        lines = file.readlines()
+    # 修改行内容
+    matchStr=paramName+"="
+    for i, line in enumerate(lines):
+        if matchStr in lines[i]:
+            lines[i] = ""+paramName+"=\""+str(value)+"\"\n"
+    # 打开文件进行写入
+    with open(pyFile, 'w') as file:
+        file.writelines(lines)
 
 

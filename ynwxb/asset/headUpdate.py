@@ -48,3 +48,7 @@ elif args[0]=='auditPass':
     c.pget("/ynwxb/asset/headupdate/auditPass/5807347815165952?auditDes=同意")
 elif args[0]=='auditNoPass':
     c.pget("/ynwxb/asset/headupdate/auditNoPass/5794770016284672,5791089415368704?auditDes=不同意")
+elif args[0]=='auditPass':
+    c.pget("/ynwxb/asset/headupdate/auditPass/5807347815165952?auditDes=同意")
+elif args[0]=='auditNoPass':
+    c.pget("/ynwxb/asset/headupdate/auditNoPass/5794770016284672,5791089415368704?auditDes=不同意")

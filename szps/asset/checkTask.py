@@ -15,6 +15,10 @@ def rfidCheckOffline():
     files = {'excelFile': open("rfidReport.xls", 'rb')}
     c.post_file_req('/ass/rfid/5749489507442688/imp',files,{})
 
+def checkedList():
+    c.pget("/ass/check/taskAssetList?taskId=5749489507442688&checkStatus=1&page=1&limit=10")
+
+
 
 # assetOverview()
 
@@ -23,4 +27,6 @@ def rfidCheckOffline():
 
 
 #rfid离线盘点
-rfidCheckOffline()
+# rfidCheckOffline()
+
+checkedList()

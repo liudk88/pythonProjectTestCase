@@ -28,5 +28,5 @@ password="cdD4jBcXaI0GAuqik10zdnEpi7ZGDDYMXjNNleRb4TRoJkaTAhjkLfgnXI6XUWKGfMR124
 access_token=login(getLoginPostData())
 
 #update access_token
-g.put("access_token",access_token)
-
+# g.put("access_token",access_token)
+c.put('config.py','access_token',access_token)
