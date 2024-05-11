@@ -1,10 +1,12 @@
 #  ===> 资产核查填报 <===
-
 import sys
 sys.path.append("../..")
 import common as c
 from FunClass import FunClass
 import json
+
+# 记住最后一次执行的方法的下标
+gt_lastExeFunIndex="2"
 
 l=[]
 l.append(FunClass("taskList","【任务列表】"))
@@ -17,8 +19,6 @@ l.append(FunClass("impDatas","【任务列表:核查|信息系统列表：导入
 
 # 单位范围id，资产核查后面的功能都关联此参数
 g_scopeId="5986985363296256"
-# 记住最后一次执行的方法的下标
-gt_lastExeFunIndex="2"
 
 def taskList():
     c.pget("/ynwxb/asset/view/taskList?workWay=1&page=1&limit=10")
@@ -88,7 +88,7 @@ def impDatas():
 funlist=''
 if len(gt_lastExeFunIndex)==0:
     for index,f in enumerate(l):
-        print(f"{index}. {f.toString()}")
+        print(str(index)+". "+f.toString())
     funlist = input("请输入需要执行的方法序号，多个以英文逗号隔开:")
     if len(funlist)>0:
         c.put("asset_reporting.py","gt_lastExeFunIndex",funlist) #记住下标，下次直接回车使用
@@ -98,6 +98,6 @@ else:
 indexArr=funlist.split(",")
 for index,f in enumerate(l):
     if str(index) in indexArr:
-        print(f"执行方法=> {f.name}")
+        print('执行方法=> '+f.name)
         func = globals()[f.name]
         func()

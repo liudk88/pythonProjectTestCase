@@ -13,7 +13,10 @@ def getLoginPostData():
         # uname="kmAdmin"
         return {"username":uname,"password":"SGN4YTIwMTkh"}
     else:
+        # admin
         username="SckY4x8ZKcXREQLYphA63UfVxg8C+b51BXNqyOSuSBF/OGbrqxrJT56ZOrivquf8HqWooqhbLzESZNFN2bUQdQgLRroUYep1hfFj3eGj2GRxRYEAWLZ58zT3DEfeRo1jYi+UBSJsncRBoDpIHQA4fkgTAFqxWXvpcfuvCn/gOn4="
+        # zhengquanjun2
+        # username="jIqGjdYdDjUHMxxgGazgOsCfUcjElGEnhDJ/Uv647frb9dapJos9PAKRqab2QcIkqxKSaZt4kjHaPDY5yN68uMT6HUn6bTsz3qdAw8fAu6aGrTyGgG8YRdHsbmLCRo1oHzjuUUhJ92JjaLD2uyRos7kBQjPsRbWKJg+dYu5zXnE="
         password="cdD4jBcXaI0GAuqik10zdnEpi7ZGDDYMXjNNleRb4TRoJkaTAhjkLfgnXI6XUWKGfMR124fYDDBE0rOw8yZzNSDxWtwDhd+O0fYt+v5XdkK8iHRXC5G6m6YHbGTGDZRO2GyzKaIdK1INUa1ZM0ZFcEOcPp7Hi7BCXSnYTe8oj5E="
         return {"username":username,"password":password}
 
