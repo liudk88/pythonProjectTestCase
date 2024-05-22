@@ -8,6 +8,18 @@ gt_lastExeFunIndex="0"
 l=[]
 l.append(FunClass("createFunFormCurl","【把cur命令结果生成函数到文件】"))
 
+def remove_empty_values(json_str):
+    data = json.loads(json_str)
+    # 使用递归函数去除空值
+    def remove_empty(d):
+        if isinstance(d, dict):
+            return {k: remove_empty(v) for k, v in d.items() if v or (isinstance(v, list) and len(v) > 0)}
+        if isinstance(d, list):
+            return [remove_empty(v) for v in d if v or (isinstance(v, list) and len(v) > 0)]
+        return d
+
+    return json.dumps(remove_empty(data))
+
 def createFunFormCurl():
     with open("draft", 'r') as file:
         lines = file.readlines()
@@ -19,7 +31,7 @@ def createFunFormCurl():
                 method='post'
                 postDataStr=lines[i].replace("--data-raw '","").replace("}' \\","}").strip()
                 postData=json.loads(postDataStr)
-                postDataStr=postDataStr.replace("null","None").replace("true","True")
+                # postDataStr=postDataStr.replace("null","None").replace("true","True")
                 # postDataStr=json.dumps(postData, indent=4, ensure_ascii=False)
             elif 'curl' in lines[i]:
                 url=lines[i].replace("curl ","").replace("\' \\","").strip()
@@ -37,11 +49,9 @@ def createFunFormCurl():
         if 'get'== method:
             print("    c.pget(\""+url+"\")")
         elif 'post'== method:
-            print("    postData="+postDataStr)
+            print("    # postData="+postDataStr.replace("null","None").replace("true","True"))
+            print("    postData="+remove_empty_values(postDataStr))
             print("    c.ppost(\""+url+"\",postData)")
-
-
-
 
 # =================
 #如果gt_lastExeFunIndex有值，那么就以gt_lastExeFunIndex为执行目标

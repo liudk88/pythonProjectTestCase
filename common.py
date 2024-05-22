@@ -36,12 +36,12 @@ def post_file_request(url,fileToken,file_path):
         if url not in [None, ""]:
             if url.startswith("http") or url.startswith("https"):
                 files = {'file': open(file_path, 'rb')}
-                res = requests.post(url,headers=headers, files=files, data=data)
+                res = requests.post(url, headers=g_headers, files=files, data=data)
                 return {"code": 0, "res": res}
 
 def post_asset(assetType,postData):
     url = getUrl("/form/AssetForm-"+assetType)
-    req=requests.post(url=url,json=postData,headers=headers)
+    req=requests.post(url=url, json=postData, headers=g_headers)
     print(req.text)
     data=req.json()
     if data['code'] == 0:
@@ -51,8 +51,8 @@ def post_asset(assetType,postData):
 
 
 # ============= 20240314 add =============
-
-headers = {"Authorization":g.access_token}
+g_printTable='0'
+g_headers = {"Authorization":g.access_token}
 
 mdTdLen=15
 
@@ -147,21 +147,26 @@ def printTable(jobj,printTitle,level):
 
 
 # -- begin 重新封装get请求
-def get(url,params={}):
-    print("请求地址： "+url)
-    return requests.get(url=g.domain+url,params=params,headers=headers,verify = False)
+def get(url,params={},headers={}):
+    print("▶ 请求地址： "+url)
+    if len(headers)==0:
+        headers=g_headers
+    return requests.get(url=g.domain+url, params=params, headers=headers, verify = False)
 
 # def get(url):
 #     print("请求地址： "+url)
 #     return requests.get(url=g.domain+url,headers=headers,verify = False)
 
-def post(url,params):
+def post(url,params,headers={}):
     print("请求地址： "+url)
-    return requests.post(url=g.domain+url,json=params,headers=headers,verify = False)
+    if len(headers)==0:
+        headers=g_headers
+    return requests.post(url=g.domain+url, json=params, headers=headers, verify = False)
+
 # 以formData的方式提交参数
-def postf(url,params):
+def formPost(url,params):
     print("请求地址： "+url)
-    return requests.post(url=g.domain+url,data=params,headers=headers,verify = False)
+    return requests.post(url=g.domain+url, data=params, headers=g_headers, verify = False)
 
 #--
 # def pget(url):
@@ -173,18 +178,20 @@ def postf(url,params):
 
 def pget(url,params={}):
     res=get(url,params)
+    print("◀ 返回信息：")
     jprint(res.json())
-    printTable(res.json(),"1",0)
+    if g_printTable == '1':
+        printTable(res.json(),"1",0)
     return res
 
-def ppost(url,params):
-    res=post(url,params)
+def ppost(url,params,headers={}):
+    res=post(url,params,headers)
     print("返回信息：")
     jprint(res.json())
     return res
 
-def ppostf(url,params):
-    res=postf(url,params)
+def pformPost(url,params):
+    res=formPost(url,params)
     print("返回信息：")
     jprint(res.json())
     return res
@@ -200,7 +207,7 @@ def jprint(jsonData):
 
 # charset参数可以限制文件编码格式
 def post_file_req(url,fileDatas,data):
-    res = requests.post(g.domain+url,headers=headers, files=fileDatas, data=data)
+    res = requests.post(g.domain + url, headers=g_headers, files=fileDatas, data=data)
     print("返回信息：")
     jprint(res.json())
     return res
@@ -223,5 +230,40 @@ def put(pyFile,paramName,value):
     # 打开文件进行写入
     with open(pyFile, 'w') as file:
         file.writelines(lines)
+
+
+## ===========================文件方法快速调用 begin
+# 一. 如果执行命令有指定参数f，那么按f指定的函数执行
+  # 终端运行格式: python ./xxx.py -f 函数1,函数2...
+  # idea编辑命令，在Parammeters里填写 -f 函数1,函数2...
+# 二. 一个py文件定两个个全局变量gt_lastExeFunIndex和funList，前者表示需要执行的函数下标（多个以英文逗号隔开），后者是供调用的函数列表
+# 如果gt_lastExeFunIndex有值，那么就以gt_lastExeFunIndex为执行列表中对应的函数目标
+# 如果没有，那么提示输入，按输入执行，并更新gt_lastExeFunIndex的值
+def callSelfFun(caller):
+    args=sys.argv[1:]
+    if len(args)==2:
+        callFunList=args[1].split(",")
+        for index,f in enumerate(callFunList):
+            print('执行方法=> '+f)
+            func = caller[f]
+            func()
+    else:
+        exeFunIndex=caller['gt_lastExeFunIndex'] #获取调用者的调用函数下标
+        funList=caller['funList'] #获取调用者的函数列表
+        if len(exeFunIndex)==0:
+            for index,f in enumerate(funList):
+                print(str(index)+". "+f.toString())
+            exeFunIndex = input("请输入需要执行的方法序号，多个以英文逗号隔开:")
+            if len(exeFunIndex)>0:
+                put(caller['__file__'],"gt_lastExeFunIndex",exeFunIndex) #修改源文件调用函数下标，下次直接回车使用
+
+        indexArr=exeFunIndex.split(",")
+        for index,f in enumerate(funList):
+            if str(index) in indexArr:
+                print('执行方法=> '+f.name +": "+f.des)
+                func = caller[f.name]
+                func()
+
+## ===========================文件方法快速调用 end
 
 

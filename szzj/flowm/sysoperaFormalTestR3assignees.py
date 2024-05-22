@@ -8,7 +8,7 @@ testData=common.getData()
 print('==> test 测试资源提交申请后办理人 <===')
 url = common.getUrl("/wf/task?business_id="+testData['testResource_flowSeq'])
 
-req=requests.get(url=url,headers=common.headers,verify = False)
+req=requests.get(url=url, headers=common.g_headers, verify = False)
 print(req.text)s
 
 datas=req.json()['data']['users']

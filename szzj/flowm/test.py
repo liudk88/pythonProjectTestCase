@@ -1,14 +1,17 @@
 #!python
 # encoding: utf-8
-import common
 import json
 import requests
+import common as c
+from FunClass import FunClass
 
-def getBugData():
-    with open('./bugData.json','r') as fp:
-        return json.load(fp)
+import test2 as t2
 
-bugData=getBugData()
+# def getBugData():
+#     with open('./bugData.json','r') as fp:
+#         return json.load(fp)
+#
+# bugData=getBugData()
 
 # 数据库更新申请	sysoperaDbUpdate
 # 正式资源申请	sysoperaFormalRR
@@ -19,6 +22,5 @@ bugData=getBugData()
 # common.post_applay("sysoperaUpdate",bugData)
 
 # url = common.getUrl("/wf/flow/sysoperaFormalTestR/create?objNode=serverGrant&assignees=12")
-url = common.getUrl("/runtime/tasks?start=0&size=3")
-req=requests.get(url=url,headers=common.headers)
-print req.text
+
+c.pget("/wf/task?business_id=2024051700009")

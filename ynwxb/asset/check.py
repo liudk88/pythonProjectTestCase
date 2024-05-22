@@ -109,7 +109,7 @@ elif args[0]=='orgManage2':
 elif args[0]=='workItems':  #填报列表
     c.pget("/domain/app/workItems?workId=5789140244484096&scopeId=5789140245401600&page=1&limit=10")
 elif args[0]=='publishScope':
-    c.ppostf("/domain/app/publishScope",{"scopeId":"5751453370142731"})
+    c.formPost("/domain/app/publishScope",{"scopeId":"5751453370142731"})
 
 # 资产核查
 elif args[0]=='assetCheckOrgTask':
