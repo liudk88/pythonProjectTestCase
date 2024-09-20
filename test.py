@@ -16,16 +16,4 @@ import common as c
 
 # c.pget("/ldktest/list")
 # c.ppost("/login/testDecode",{"str":"SckY4x8ZKcXREQLYphA63UfVxg8C+b51BXNqyOSuSBF/OGbrqxrJT56ZOrivquf8HqWooqhbLzESZNFN2bUQdQgLRroUYep1hfFj3eGj2GRxRYEAWLZ58zT3DEfeRo1jYi+UBSJsncRBoDpIHQA4fkgTAFqxWXvpcfuvCn/gOn4="})
-
-def aa(xx,json={},header={}):
-    print("call fun")
-    if len(json)==0:
-        print("没有传入参数")
-    else:
-        print("有传入参数："+str(json))
-
-    print(header)
-
-
-aa(22)
-aa(33,header={"aa":"33"})
+c.pget("/asset/backup/myBackupList?startDateStr=2024-05-22&endDateStr=2024-05-31&page=1&limit=10")

@@ -1,3 +1,5 @@
-domain="http://localhost:9031/nisg"
+# domain="http://localhost:9031/nisg"
+domain="http://localhost:8080"
 # domain="http://192.168.99.59:8400/nisg"
-access_token="5d487008-8d44-417c-b0aa-f665dd9e6b60"
+# domain="http://192.168.99.59:7101/nisg"
+access_token="Bearer DZSMS1001_-1764363171724985590887"

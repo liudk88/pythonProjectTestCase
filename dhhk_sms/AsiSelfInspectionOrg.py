@@ -4,6 +4,8 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 import common as c
 
+g_id=1826150625033961473
+
 addData={
     "planId":"123", # 计划主键
     "selfCheckWay":"自查形式(0:日常检查;1:专项检查;2:其他检查)", # 自查形式(0:日常检查;1:专项检查;2:其他检查)
@@ -24,6 +26,9 @@ def commitApply(postData={"id":"1825779965802602497","planReviewTime":"2024-08-2
     print("【提交复查】")
     return c.ppost("/asi/self/inspection/org/commitReview",postData)
 
+def getTaskInfo(id=g_id,taskId="d5f9da5c-5f92-11ef-95e3-0050569cb713"):
+    return c.pget("/asi/self/inspection/org/"+str(id)+"/task/"+taskId)
+
 def dealWf(username,currentStepName,comment,selfParams={}):
     task=flow.findToDoTask(username)[0]
     taskId=task['taskId']
@@ -38,6 +43,10 @@ def deal():
     dealWf('anjianzhiban','上传复查结果',"ok",{"id":1825779965802602497,"reviewResult":"reviewResult001",
                 'taskId': 'b15bd04a-5ec4-11ef-8805-525400123456',"entityId":"1825779965802602497",
                 "attachments":[{"name":"fcResulttime1.png","url":"url1"},{"name":"fcResultaaaa1.xlsx","url":"url2"}]})
+
+def remove():
+    print("remove")
+    c.pget("/asi/self/inspection/org/remove/1825729762123956225",{});
 
 funs=""
 

@@ -1,12 +1,9 @@
 {
-  "domain" : "http://localhost:9031/nisg",
-  "commonPwd" : "SGN4YTIwMTkh",
-  "liudk_access_token" : "2c2b7000-3efb-439c-a903-84ae388b8642",
   "testResource_flowSeq" : "2023030700005",
-  "resource_flowSeq" : "2023030700002",
-  "goOnline_flowSeq" : "2023030700003",
+  "resource_flowSeq" : "2024021800002",
+  "goOnline_flowSeq" : "2024081100048",
   "dbUpdate_flowSeq" : "2023030900001",
-  "update_flowSeq" : "2023030700013",
+  "update_flowSeq" : "20240080900007",
   "configUpdate_flowSeq" : "2024022100012",
   "timeSleep" : 0
 }

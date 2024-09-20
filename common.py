@@ -7,6 +7,12 @@ import os
 import random
 import sys
 import re
+from datetime import datetime
+
+# 获取当前时间
+now = datetime.now()
+# 格式化为 yyyyMMddHHmm 格式
+ftime = now.strftime('%Y%m%d%H%M_%S')
 
 def getVals(valArr,numberOfTimes):
     result=[]
@@ -52,9 +58,10 @@ def post_asset(assetType,postData):
 
 # ============= 20240314 add =============
 g_printTable='0'
+g_printJson='1'
 g_headers = {"Authorization":g.access_token}
 
-mdTdLen=15
+mdTdLen=50
 
 def get_len(string: str):
     """
@@ -158,8 +165,8 @@ def get(url,params={},headers={}):
 #     return requests.get(url=g.domain+url,headers=headers,verify = False)
 
 def post(url,params,headers={}):
-    print("请求地址： "+url)
-    if len(headers)==0:
+    print("▶ 请求地址： "+url + "，请求参数："+str(params))
+    if type(headers) == dict and len(headers)==0 :
         headers=g_headers
     return requests.post(url=g.domain+url, json=params, headers=headers, verify = False)
 
@@ -168,6 +175,11 @@ def formPost(url,params):
     print("请求地址： "+url)
     return requests.post(url=g.domain+url, data=params, headers=g_headers, verify = False)
 
+def putUrl(url,params,headers={}):
+    print("请求地址： "+url)
+    if type(headers) == dict and len(headers)==0 :
+        headers=g_headers
+    return requests.put(url=g.domain+url, json=params, headers=headers, verify = False)
 #--
 # def pget(url):
 #     res=get(url)
@@ -178,14 +190,23 @@ def formPost(url,params):
 
 def pget(url,params={}):
     res=get(url,params)
-    print("◀ 返回信息：")
-    jprint(res.json())
+    if g_printJson == '1':
+        print("◀ 返回信息：")
+        jprint(res.json())
     if g_printTable == '1':
         printTable(res.json(),"1",0)
     return res
 
 def ppost(url,params,headers={}):
     res=post(url,params,headers)
+    print("◀ 返回信息：")
+    jprint(res.json())
+    if g_printTable == '1':
+        printTable(res.json(),"1",0)
+    return res
+
+def pput(url,params,headers={}):
+    res=putUrl(url,params,headers)
     print("返回信息：")
     jprint(res.json())
     return res
@@ -218,6 +239,11 @@ def downLoad(url,saveDir,params={}):
     with open(saveDir,"wb") as code:
         code.write(r.content)
 
+def downLoadPost(url,saveDir,params={}):
+    r=post(url,params)
+    with open(saveDir,"wb") as code:
+        code.write(r.content)
+
 # 提供修改文件参数的方法
 def put(pyFile,paramName,value):
     with open(pyFile, 'r') as file:
@@ -241,8 +267,13 @@ def put(pyFile,paramName,value):
 # 如果没有，那么提示输入，按输入执行，并更新gt_lastExeFunIndex的值
 def callSelfFun(caller):
     args=sys.argv[1:]
+    callFunList=""
     if len(args)==2:
         callFunList=args[1].split(",")
+    elif 'funs' in caller and caller['funs']!="":
+        callFunList=caller['funs'].split(",")
+
+    if callFunList !="":
         for index,f in enumerate(callFunList):
             print('执行方法=> '+f)
             func = caller[f]
