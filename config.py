@@ -2,4 +2,4 @@
 domain="http://localhost:8080"
 # domain="http://192.168.99.59:8400/nisg"
 # domain="http://192.168.99.59:7101/nisg"
-access_token="Bearer DZSMS1001_-1764363171724985590887"
+access_token="Bearer DZSMS1001_16861006041727677889109"

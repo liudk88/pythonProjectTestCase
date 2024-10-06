@@ -23,13 +23,13 @@ funList.append(FunClass("techManageUpdate","【更新：技术授权管理】"))
 funList.append(FunClass("techManageList","【列表：技术授权管理】")) #12
 funList.append(FunClass("techManageDel","【删除：技术授权管理】")) #13
 
-g_techConfigId=6391145112809472
+g_techConfigId=6893227822166016
 
 def techConfigAdd(postData={"techGradeName":"技术授权配置1","techGradeType":"技术等级类型01","gradeNum":"1","remark":"证件备注"
     ,"remarkForTrain":"训练备注","remarkForFlair":"资质备注","remarkForFlightExp":"飞行经验备注"
     ,"reqTrainList":[{"groupId":1,"trainToDo":111,"trainDays":1},{"groupId":1,"trainToDo":222,"trainDays":2},{"groupId":2,"trainToDo":333,"trainDays":3}]
     ,"reqQualList":[{"qualToNeed":111},{"qualToNeed":222},{"qualToNeed":333}]
-    ,"reqFlightExpList":[{"groupId":1,"techGrade":"dj1","flightExp":"jy1","expNum":1}
+    ,"reqFlightExpList":[{"groupId":1,"techGradeList":["100","200","300"],"flightExp":"jy1","expNum":1}
         ,{"groupId":1,"techGrade":"dj2","flightExp":"jy2","expNum":2},{"groupId":2,"techGrade":"dj3","flightExp":"jy3","expNum":3}]
     ,"suitPeopleList":["0","1"]
     ,"suitModelList":["B738"]}):
@@ -37,11 +37,11 @@ def techConfigAdd(postData={"techGradeName":"技术授权配置1","techGradeType
 
 
 def techConfigUpdate():
-    postData={"id":6356819198947328,"techGradeName":"技术授权配置2","techGradeType":"技术等级类型21","gradeNum":"2","remark":"证件备注2"
+    postData={"id":6893227822166016,"techGradeName":"技术授权配置2","techGradeType":"技术等级类型21","gradeNum":"2","remark":"证件备注2"
         ,"remarkForTrain":"训练备注2","remarkForFlair":"资质备注2","remarkForFlightExp":"飞行经验备注2"
         ,"reqTrainList":[{"groupId":1,"trainToDo":22111,"trainDays":1},{"groupId":1,"trainToDo":22222,"trainDays":2},{"groupId":2,"trainToDo":22333,"trainDays":3}]
         ,"reqQualList":[{"qualToNeed":111},{"qualToNeed":222},{"qualToNeed":333}]
-        ,"reqFlightExpList":[{"groupId":1,"techGrade":"2dj1","flightExp":"2jy1","expNum":1}
+        ,"reqFlightExpList":[{"groupId":1,"techGrade":"2dj1","flightExp":"2jy1","expNum":66}
             ,{"groupId":1,"techGrade":"dj2","flightExp":"jy2","expNum":2},{"groupId":2,"techGrade":"dj3","flightExp":"jy3","expNum":3}]
         ,"suitPeopleList":["4","5"]
         ,"suitModelList":["jx1","jx2"]}
@@ -51,14 +51,14 @@ def techConfigList():
     c.pget("/config/tech/list?pageNum=1&pageSize=10&orderProperty=suitPeople&asc=true&paged=true")
 
 def techConfigDel():
-    c.pget("/config/tech/remove/6350041008844800")
+    c.pget("/config/tech/remove/6469968876089344?historyDataDealWay=1")
 
 def techConfigInfo(techConfigId=g_techConfigId):
     return c.pget("/config/tech/"+str(techConfigId))
 
 def techConfigExport():
     output="/home/liudk/Downloads/技术授权配置.xlsx"
-    c.downLoad("/config/tech/export",output)
+    c.downLoadPost("/config/tech/export",output)
     print('导出的文件：'+output)
 
 def techManageAdd(postData={"techConfigId":g_techConfigId,"userId":"zhangsan","empNo":"testgh5001","effectiveTime":"2024-06-27","remark":"技术授权管理备注"
@@ -98,7 +98,7 @@ def techManageList():
 
 def techManageExport():
     output="/home/liudk/Downloads/技术授权管理.xlsx"
-    c.downLoad("/manage/tech/export",output)
+    c.downLoadPost("/manage/tech/export",output)
     print('导出的文件：'+output)
 
 def downTemplate():

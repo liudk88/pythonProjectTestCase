@@ -159,7 +159,10 @@ def downExcel(fileName="fdzc.xlsx"):
 
 def test():
     # c.pget("/sys/position/findUsersByPositionId?id=14")
-    c.ppost("/sys/user/position/manage/batchAdd",{"positionId":10,"userId":1010,"deptIdList":[1]})
+    # c.ppost("/sys/user/position/manage/batchAdd",{"positionId":10,"userId":1010,"deptIdList":[1]})
+    c.ppost("/processInst/findProcessManage",{"pageSize":15,"pageNum":1,"currentAssigneeNameOrEno":"A01933"})
+    # c.ppost("/processInst/findTaskAssigeeeUpdateLog",{"pageSize":10,"pageNum":1,"procInstId":"00276f06-6f22-11ef-99b3-0050569cb713"})
+    # c.ppost("/processInst/updateTaskAssigeee",{"taskIdList":["46f5cdeb-6f22-11ef-99b3-0050569cb713","e549ee7b-725c-11ef-b6b8-005056c00001"],"afterContent":"1001"})
 
 # funs="init"
 # funs="add"

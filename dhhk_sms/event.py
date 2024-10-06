@@ -4,7 +4,7 @@ sys.path.append("../..")
 import common as c
 
 # 新增信息报告-草稿
-def saveDraft(postData={"type":"002","title":"测试资源报告ldk","flightDate":"2024-07-08","address":"地点","acReg":"飞机号","flightNo":"航班号","msgType":"1",
+def saveDraft(postData={"type":"002","title":"测试资源报告ldk1111","flightDate":"2024-07-08","address":"地点","acReg":"飞机号","flightNo":"航班号","msgType":"1",
                         "departure":"起飞点","arrival":"落地点","aircraftNo":"航空器","carNo":"车辆","groundEquipment":"地面设施","aircraftDamage":"1",
                         "carDamage":"1","groundDamage":"1","otherReason":"其他原因","edescription":"事件经过","category":"1","appendFiles":"None",
                         "occurDate":"2024-07-09 14:00","otherReasonDamage":"1","otherReason":"其他原因"}):
@@ -42,7 +42,7 @@ def submitAnony(postData={"type":"003","title":"测试安全举报","flightDate"
     print("提交报告-未验证退出登录时提交")
     return c.ppost("/asi/inform/anonyApply",postData)
 
-def findEventPage(postData={"pageNum":1,"pageSize":10,"deptId":"1536265613394063361","applyTimeOrderBy":"0"}):
+def findEventPage(postData={"pageNum":1,"pageSize":10,"applyTimeStart":"2024-07-24 12:30","applyTimeOrderBy":"0"}):
     print("查询事件列表")
     # return c.ppost("/asi/inform/findPage",postData)
     return c.ppost("/asi/inform/findSelf",postData)
@@ -156,10 +156,10 @@ def getCode():
     print("获取验证码")
     c.pget("/auth/code");
 
-def permissionAdd(eventId=1820631289052581889,deptIdList=[111],userIdList=[1003]):
+def permissionAdd(eventId=6776042860064768,deptIdList=[111],userIdList=[1003]):
     print("事件增加权限范围")
-    # postData={"eventId":eventId,"deptIdList":deptIdList,"userIdList":userIdList}
-    postData={"eventId":eventId,"open":"true"} # 设置公开
+    postData={"eventId":eventId,"deptIdList":deptIdList,"userIdList":userIdList}
+    # postData={"eventId":eventId,"open":"true"} # 设置公开
     return c.ppost("/asi/inform/permission/save",postData)
 
 def copyto(businessId=1822820474794590210,deptIdList=[1536265612618117121],userIdList=[1001]):
