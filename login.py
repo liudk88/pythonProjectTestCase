@@ -24,14 +24,19 @@ def getHeader(logurl="/login/login", username="", loginData={}):
     return requests.post(g.domain + logurl, json=loginData, verify=False)
 
 
-if project == "dhhk_qual":
+if project == "dhhk_qual" or project == "dhhk_vehicle":
     logurl = "/login"
     loginPostData = {"username": "admin", "password": "admin123"}
 elif project == "dhhk_sms":
     # username="A02950"
     # username="admin"
-    username = "sqr"  # 申请人
-    # username="A03383" #申请人
+    # username = "A00372"  # 申请人
+    # username = "A04950"  # 张婵 
+    username = "A04847"  
+    # username = "A00372"  # 
+    # username = "A00573"
+    # username = "A00425"  # 王楷
+    # username = "A04955"  # 江俊杰 - 安监部门的人
     # username="zrb_zb-jl" #责任部门值班经理
     # username="zrb_aj-jl" #责任部门安质经理
     # username="anjianzhiban" #安监值班
@@ -41,9 +46,10 @@ elif project == "dhhk_sms":
         "/auth/login?username=" + username + "&password=111111&code=1&uuid=&loginType=1"
     )
 elif project == "ynwxb" or project == "szzj":
-    # uname="admin"
-    uname = "liudk"
+    uname="admin"
+    # uname = "liudk"
     # uname="kmAdmin"
+    # uname="dzadmin"
     loginPostData = {"username": uname, "password": "SGN4YTIwMTkh"}
 else:
     # admin
@@ -61,11 +67,13 @@ else:
 
 def login(loginData, pname=project):
     # print("=> login into system! (account = "+loginData['username']+")")
+    print("loginUrl: "+logurl)
+    print(loginData)
     req = requests.post(g.domain + logurl, json=loginData, verify=False)
     print(req)
     c.jprint(req.json())
     access_token = ""
-    if project == "dhhk_qual":
+    if project == "dhhk_qual" or  project == "dhhk_vehicle":
         access_token = "Bearer " + req.json()["token"]
     elif project == "dhhk_sms":
         access_token = "Bearer " + req.json()["data"]

@@ -1,0 +1,36 @@
+# 通勤用车相关接口测试
+- id: "commuter_add"
+  title: "新增通勤用车"
+  url: "/vehicle/order/commuter/add"
+  type: "post"
+  params:
+    orderType: "0"
+    location: "深圳"
+    destination: "深圳市福田区xxx街道"
+    startPoint: "sz"
+    passengerCount: 2
+    remark: "这是一条通勤用车申请单"
+  format_response: false  # 不格式化响应
+  save:
+    orderId: "$.data"
+
+- id: "commuter_info"
+  title: "通勤用车查看"
+  url: "/vehicle/order/${orderId}"
+  # url: "/vehicle/order/JP20250225000010"
+  type: "get"
+  format_response: true  # 格式化响应
+
+- id: "commuter_query"
+  title: "查询通勤用车"
+  url: "/vehicle/order/commuter/list"
+  params:
+    orderType: 1
+  type: "post"
+  format_response: true  # 格式化响应
+
+- id: "commuter_exp"
+  title: "导出通勤用车"
+  url: "/vehicle/order/commuter/export"
+  file_save_dir: "/home/liudk/Downloads/通勤用车.xlsx"
+  type: "download_post"

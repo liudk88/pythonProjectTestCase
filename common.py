@@ -8,6 +8,12 @@ import random
 import sys
 import re
 from datetime import datetime
+import yaml
+from jsonpath_ng import jsonpath
+from jsonpath_ng.ext import parse
+from logger import get_logger
+
+logger = get_logger('common')
 
 # 获取当前时间
 now = datetime.now()
@@ -83,7 +89,7 @@ def get_len(string: str):
     return length
 
 
-# 把字符串全部转换为“-”
+# 把字符串全部转换为"-"
 def repalceToFg(str):
     pattern = "."
     return re.sub(pattern, "-", str)
@@ -286,7 +292,6 @@ def put(pyFile, paramName, value):
     with open(pyFile, "w") as file:
         file.writelines(lines)
 
-
 ## ===========================文件方法快速调用 begin
 # 一. 如果执行命令有指定参数f，那么按f指定的函数执行
 # 终端运行格式: python ./xxx.py -f 函数1,函数2...
@@ -328,3 +333,118 @@ def callSelfFun(caller):
 
 
 ## ===========================文件方法快速调用 end
+
+def _get_group_names():
+    """通过扫描配置文件获取所有组名"""
+    groups = set()
+    try:
+        # 加载debug.yaml获取所有配置文件路径
+        with open('debug.yaml', 'r', encoding='utf-8') as f:
+            config = yaml.safe_load(f)
+            for file_config in config:
+                if file_config.get('enabled', False):  # 只处理启用的配置(不设置表示不启用)
+                    file_path = file_config['path']
+                    # 从文件名中提取组名
+                    file_name = os.path.splitext(os.path.basename(file_path))[0]
+                    group_name = file_name.replace('_debug', '')
+                    groups.add(group_name)
+    except Exception as e:
+        logger.error(f"获取组名失败: {str(e)}")
+    return groups
+
+class RequestContext:
+    def __init__(self, current_group=None):
+        self.current_group = current_group
+        self.global_vars_file = 'global_vars.json'
+        self.variables = self._load_global_vars()
+        
+    def _load_global_vars(self):
+        """加载全局变量"""
+        try:
+            if os.path.exists(self.global_vars_file):
+                with open(self.global_vars_file, 'r', encoding='utf-8') as f:
+                    content = f.read().strip()
+                    if content:  # 如果文件不为空
+                        try:
+                            return json.loads(content)
+                        except json.JSONDecodeError:
+                            logger.error("全局变量文件格式错误，将重置为默认结构")
+                
+            # 如果文件不存在、为空或格式错误，创建默认结构
+            default_vars = {}
+            for group in _get_group_names():
+                default_vars[group] = {}
+                
+            # 如果没有找到任何组，至少创建一个空结构
+            if not default_vars:
+                default_vars = {"default_group": {}}
+                
+            self._save_global_vars(default_vars)
+            return default_vars
+        except Exception as e:
+            logger.error(f"加载全局变量文件失败: {str(e)}")
+            return {}
+            
+    def _save_global_vars(self, vars_data=None):
+        """保存全局变量"""
+        try:
+            with open(self.global_vars_file, 'w', encoding='utf-8') as f:
+                json.dump(vars_data or self.variables, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            logger.error(f"保存全局变量文件失败: {str(e)}")
+    
+    def save_response_data(self, response_data, save_rules):
+        """保存响应数据到变量"""
+        if not self.current_group:
+            return
+            
+        group_vars = self.variables.get(self.current_group, {})
+        for var_name, path in save_rules.items():
+            if path.startswith('$.'):
+                jsonpath_expr = parse(path)
+                matches = jsonpath_expr.find(response_data)
+                if matches:
+                    group_vars[var_name] = matches[0].value
+                    logger.info(f"保存变量 {self.current_group}.{var_name}: {matches[0].value}")
+        
+        self.variables[self.current_group] = group_vars
+        self._save_global_vars()
+    
+    def replace_variables(self, text):
+        """替换字符串中的变量引用"""
+        if not isinstance(text, str):
+            return text
+            
+        def replace_var(match):
+            var_path = match.group(1)
+            # 检查是否指定了组名
+            if '.' in var_path:
+                group, var_name = var_path.split('.')
+                return str(self.variables.get(group, {}).get(var_name, ''))
+            # 没有指定组名，使用当前组
+            elif self.current_group:
+                return str(self.variables.get(self.current_group, {}).get(var_path, ''))
+            return ''
+            
+        return re.sub(r'\${([\w.]+)}', replace_var, text)
+
+    def replace_params(self, params):
+        """递归替换参数中的变量"""
+        if isinstance(params, dict):
+            return {k: self.replace_params(v) for k, v in params.items()}
+        elif isinstance(params, list):
+            return [self.replace_params(v) for v in params]
+        else:
+            return self.replace_variables(params)
+
+def load_yaml_file(file_path):
+    """加载YAML文件"""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f)
+    except FileNotFoundError:
+        logger.error(f"错误：找不到文件 {file_path}")
+        raise
+    except yaml.YAMLError as e:
+        logger.error(f"错误：YAML文件格式不正确: {str(e)}")
+        raise

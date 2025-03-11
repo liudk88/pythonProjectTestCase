@@ -1,20 +1,25 @@
 #  ===> 技术授权 <===
+import datetime
 import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 sys.path.append("../..")
 import common as c
-import os
 
-g_techConfigId = 7091825656934400
+# 获取当前时间
+now = datetime.datetime.now()
+# 格式化时间为指定字符串格式，这里按照年、月、日、时、分拼接并格式化
+time_str = now.strftime('%Y%m%d-%H%M')
+
+g_techConfigId = 7295626636111872 
 g_techManageId = "7092328368386048"
 
 
 def configAdd(
     postData={
-        "techGradeName": "菜单v111",
-        "techGradeType": "技术等级类型01",
+        "techGradeName": "技术授权"+time_str,
+        # "techGradeType": "技术等级类型01",
         "gradeNum": "1",
         "remark": "证件备注",
         "remarkForTrain": "训练备注",
@@ -44,11 +49,17 @@ def configAdd(
             {"groupId": "def", "techGrade": "dj2", "flightExp": "jy2", "expNum": 2},
             {"groupId": "ghi", "techGrade": "dj3", "flightExp": "jy3", "expNum": 3},
         ],
-        "validityPeriodUnit": "0",
-        "validityPeriod": "2",
+        # "validityPeriodUnit": "0",
+        # "validityPeriod": "2",
         # ,"suitPeopleList":["0","1"]
         "suitPeople": "zhangsan",
         "suitModelList": ["B737"],
+        "orderByList": [
+            {"id":"7261191222472704","gradeNum":1},
+            {"id":"7261203710685184","gradeNum":3},
+            {"id":"7261205679779840","gradeNum":5},
+            {"id":"newId","gradeNum":7},
+        ],
     },
 ):
     return c.ppost("/config/tech/add", postData)
@@ -56,8 +67,8 @@ def configAdd(
 
 def configUpdate():
     postData = {
-        "id": 6893227822166016,
-        "techGradeName": "技术授权配置2",
+        "id": 7295642825011200,
+        "techGradeName": "技术授权配置ldk",
         "techGradeType": "技术等级类型21",
         "gradeNum": "2",
         "remark": "证件备注2",
@@ -75,24 +86,28 @@ def configUpdate():
             {"groupId": 1, "techGrade": "dj2", "flightExp": "jy2", "expNum": 2},
             {"groupId": 2, "techGrade": "dj3", "flightExp": "jy3", "expNum": 3},
         ],
-        "suitPeopleList": ["4", "5"],
+        "suitPeople": "zhangsan",
         "suitModelList": ["jx1", "jx2"],
+        "orderByList": [
+            {"id":"7261191222472704","gradeNum":2},
+            {"id":"7261203710685184","gradeNum":4},
+            {"id":"7261205679779840","gradeNum":6},
+        ],
     }
     c.ppost("/config/tech/update", postData)
 
 
 def configList():
-    # c.pget("/config/tech/list?pageNum=1&pageSize=10&suitMode=B738&orderProperty=suitPeople&asc=true&paged=true")
-    c.pget("/config/tech/list?pageNum=1&pageSize=10&suitModeIn=B7371&suitModeIn=B7372")
-    # c.pget("/manage/empInfo/list?pageSize=10&pageNum=2")
+    c.pget("/config/tech/list?pageNum=1&pageSize=10&suitPeopleType=other&isAsc=desc")
 
 
 def configDel():
-    c.pget("/config/tech/remove/6469968876089344?historyDataDealWay=1")
+    c.pget("/config/tech/remove/6949867782680576?historyDataDealWay=1")
 
 
 def configInfo(techConfigId=g_techConfigId):
-    return c.pget("/config/tech/" + str(techConfigId))
+    # return c.pget("/config/tech/" + str(techConfigId))
+    return c.pget("/config/tech/logVo/" + str(techConfigId))
 
 
 def configExport():
@@ -105,13 +120,13 @@ def manageAdd(
     postData={
         "techConfigId": g_techConfigId,
         "empNo": "A02220",
-        "effectiveTime": "2024-06-27",
+        "effectiveTime": "2024-12-10",
         "remark": "技术授权管理备注",
         "remarkForTrain": "训练备注",
         "remarkForFlair": "资质备注",
         "remarkForFlightExp": "飞行经验备注",
         "fileInfos": [134, 135],
-        "suitModelList": ["B737"],
+        "suitModelList": ["B737","TestB737"],
     },
 ):
     postData = {
@@ -123,6 +138,7 @@ def manageAdd(
         "techConfigId": g_techConfigId,
         "fileIdList": ["146", "147", "150"],
     }
+    # postData['saveIgnoreWarnMessage']="true"
 
     res = c.ppost("/manage/tech/add", postData)
     # current_path = os.path.realpath(__file__)
@@ -171,7 +187,8 @@ def manageDisable():
 
 
 def manageList():
-    c.pget("/manage/tech/list?pageNum=1&pageSize=100&orderProperty=empNo&asc=true")
+    # c.pget("/manage/tech/list?pageNum=1&pageSize=2&suitPeopleTypeIn=other&suitPeopleTypeIn=Pilot&userNameLike=刘&orderByColumn=techGrade&isAsc=asc&showFinalEffectiveOne=true")
+    c.pget("/manage/tech/list?pageNum=1&pageSize=5&status=1")
 
 
 def manageExport():
@@ -186,9 +203,14 @@ def manageDownTemplate():
     print("导出的文件：" + output)
 
 
+
 def manageImp():
     files = {"file": open("/home/liudk/Downloads/技术授权管理导入模板.xlsx", "rb")}
+    # files = {"file": open("/home/liudk/Downloads/飞行技术等级.xlsx", "rb")}
     c.post_file_req("/manage/tech/importData?ignoreNotMatchModel=false", files, {})
+
+def reExecuteAllExpirationTime():
+    c.pget("/manage/tech/reExecuteAllExpirationTime")
 
 
 # manageAdd();

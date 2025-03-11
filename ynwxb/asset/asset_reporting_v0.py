@@ -1,71 +1,27 @@
 #  ===> 资产核查填报 <===
-import datetime
 import sys
-from pathlib import Path
-
-sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
+sys.path.append("../..")
 import common as c
-
-# 获取当前时间
-now = datetime.datetime.now()
-# 格式化时间为指定字符串格式，这里按照年、月、日、时、分拼接并格式化
-
-g_workId=7329311683170304 
-# 工作台-待办工作
-def workbenchTodoWorkList():
-    c.pget("/workbench/workList?page=1&limit=5")
-
-# 工作台-待办工作-处理(资产任务)列表
-def assetTaskList():
-    c.pget("/ynwxb/asset/view/taskList?workId="+str(g_workId)+"&page=1&limit=10")
-
-# 工作台-待办工作-处理(资产任务)列表-核查资产（查看单位任务信息）
-def assetOrgTaskInfo():
-    c.pget("/domain/app/orgRange/"+str(g_workId))
-
-# 工作台-待办工作-处理(资产任务)列表-核查资产列表
-def checkAssetList():
-    taskScopeId="7329311684415488"
-    c.pget("/view/AssetView-AU/view?flag=1&taskScopeId="+taskScopeId+"&isAuditBack=1")
-
-# 提交资产核查工作
-def submitAssetWork():
-    c.ppost("/asset/work/publishScope",{"scopeId":"7329311684415499","commitDes":"已经完成核查"})
-
-# 已办任务
-def completedWorkList():
-    c.pget("/workbench/finishList?page=1&limit=5")
-
-# 查询域名日志
-def domainLogList():
-    c.pget("/domain/log/selectLogs?appId=7187852635820032")
-
-# 资产日志
-def assetLogList():
-    c.pget("/assetLog/queryList/1044911935537020928")
-
-# 资产日志入库
-def assetStore():
-    c.ppost("/assetLog/store?assetId=1044911935537020928&storeDesc=测试入库",{})
-
-# 资产日志批量入库
-def assetBatchStore():
-    # c.ppost("/assetLog/batchStore?assetIds=1044911935537020928&assetIds=1054781728947699712&storeDesc=测试入库",{})
-    c.ppost("/assetLog/batchStore",{"storeDesc":"测试入库","assetIds":["1044911935537020928","1054781728947699712"]})
-
-# 资产填报详情
-def assetFillList():
-    c.ppost("/ynwxb/asset/view/queryReportDatas?workId=7347691315253248",{})
+from FunClass import FunClass
+import json
 
 # 记住最后一次执行的方法的下标
 gt_lastExeFunIndex="2"
 
+l=[]
+l.append(FunClass("taskList","【任务列表】"))
+l.append(FunClass("orgRange","【任务列表:核查/提交(查看单位工作)】"))
+l.append(FunClass("commit","【任务列表:提交】"))
+l.append(FunClass("toAddSystem","【任务列表:核查|信息系统列表：进入新增】"))
+l.append(FunClass("addSystem","【任务列表:核查|信息系统列表：新增保存】"))
+l.append(FunClass("expDatas","【任务列表:核查|信息系统列表：导出】"))
+l.append(FunClass("impDatas","【任务列表:核查|信息系统列表：导入】"))
 
 # 单位范围id，资产核查后面的功能都关联此参数
 g_scopeId="5986985363296256"
 
 def taskList():
-    c.pget("/ynwxb/asset/view/taskList?workWay=1&page=1&limit=1")
+    c.pget("/ynwxb/asset/view/taskList?workWay=1&page=1&limit=10")
 
 def orgRange():
     t_workId="5986985362247680"
@@ -126,6 +82,22 @@ def impDatas():
         print("下载不合法的数据xlsx")
         c.downLoad("/view/exportInvaildDatas/"+errorXlsToken,"/home/liudk/Downloads/信息系统invaild.xlsx")
 
-if __name__ == "__main__":
-    c.callSelfFun(globals())
+# =================
+#如果gt_lastExeFunIndex有值，那么就以gt_lastExeFunIndex为执行目标
+#如果没有，那么提示输入，按输入执行，并更新gt_lastExeFunIndex的值
+funlist=''
+if len(gt_lastExeFunIndex)==0:
+    for index,f in enumerate(l):
+        print(str(index)+". "+f.toString())
+    funlist = input("请输入需要执行的方法序号，多个以英文逗号隔开:")
+    if len(funlist)>0:
+        c.put("asset_reporting.py","gt_lastExeFunIndex",funlist) #记住下标，下次直接回车使用
+else:
+    funlist=gt_lastExeFunIndex
 
+indexArr=funlist.split(",")
+for index,f in enumerate(l):
+    if str(index) in indexArr:
+        print('执行方法=> '+f.name)
+        func = globals()[f.name]
+        func()

@@ -1,11 +1,18 @@
 import flow
 import sys
+import datetime
+
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 import common as c
 
+# 获取当前时间
+now = datetime.datetime.now()
+# 格式化时间为指定字符串格式，这里按照年、月、日、时、分拼接并格式化
+time_str = now.strftime('%Y%m%d-%H%M')
+
 addData={
-    "planName":c.ftime+"自查计划的名称", # 自查计划的名称
+    "planName":c.ftime+"自查计划的名称"+ time_str, # 自查计划的名称
     # "applicantId":"123", # 申请人
     # "applyTime":"2024-08-13", # 申请时间
     # "department":"123", # 自查部门
@@ -14,7 +21,7 @@ addData={
     # "implPeriod":"2024-08-13", # 实施期限
     "compilationTime":"2024-08-13 12:12", # 编制时间
     # "implState":"0", # 实施状态(0:未实施;1:实施中;2:已实施)
-
+    "isNeedLeaderAudit":1,
     "checkOrgList":[
         {
         # "planId":"123", # 计划主键
@@ -35,7 +42,7 @@ addData={
             "selfCheckWay":"02", # 自查形式(0:日常检查;1:专项检查;2:其他检查)
             "checkManageDept":456, # 局方检查单管理部门
             "checkProfessional":"02", # 局方检查单专业名称
-            "checkOrg":222, # 检查对象
+            "checkOrg":"013,014", # 检查对象
             "checkOrgLabel":"检查对象001", # 检查对象中文名
             "executivePosition":"执行岗位2", # position
             "checkItem":"检查项目", # 检查项目
@@ -47,8 +54,8 @@ addData={
         }]
 }
 
-g_id=1828976646845202434
-g_taskId="0eab87b1-65ab-11ef-a927-3609eeccf9dd"
+g_id=1873978432321228802 
+g_taskId="d85b3e46-c73f-11ef-b6d7-0050569cb713"
 
 #【新增】
 def add(postData=addData):
@@ -71,7 +78,8 @@ def commitApply(postData=addData):
     # 增加附件
     postData['attachments']=[{"name":"time.png","url":"url1","uid":1721353181741,"status":"success"},
                              {"name":"aaaa.xlsx","url":"url2","uid":1721353187096,"status":"success"}]
-
+    # 控制流程是否需要领导审核
+    postData['isNeedLeaderAudit'] = 0
     return c.ppost("/asi/self/inspection/commitApply",postData)
 
 def update(postData=addData):
@@ -106,32 +114,50 @@ def getTaskInfo(id=g_id,taskId=g_taskId):
 
 # def findToDoTask(username="sqr",postData={"page":{"limit":10,"offset":0}}):
 #     return flow.findToDoTask(username,postData)
+def dealWf(username, currentStepName, comment, selfParams={}):
+    header = flow.getHeader(username)
+    # 先查询任务
+    req = c.post(
+        "/task/findRuntimeTasks", {"page": {"limit": 100, "offset": 0}}, header
+    )
+    row = req.json()["data"]["rows"]
+    if len(row) == 0:
+        print("没有待办任务")
+    else:
+        task = row[0]
+        # print(task)
+        taskId = task["taskId"]
+        businessKey = task["businessKey"]
+        postData = {
+            "taskId": taskId,
+            "comment": comment,
+            "entityId": businessKey,
+            "passed": "true",
+        }
+        postData.update(selfParams)
+        flow.dealWfWithHeader(username, currentStepName, postData, header)
 
-def dealWf(username,currentStepName,comment,selfParams={}):
-    task=flow.findToDoTask(username,{"page":{"limit":10,"offset":0},"businessKey":str(g_id)})[0]
-    taskId=task['taskId']
-    businessKey=task['businessKey']
-    postData={"taskId":taskId,"comment":comment,"entityId":businessKey,"passed":"true"}
-    postData.update(selfParams)
-    header=flow.getHeader(username)
-    flow.dealWfWithHeader(username,currentStepName,postData,header)
 
 def audit():
     # print("审核")
 
     # A01453 A02226
-    dealWf('A02226','部门总审核',"通过",{"passed":"true"
-        ,"attachments":[{"name":"flowTime.png","url":"url1","uid":1721353181741,"status":"success"},
-        {"name":"flowAaaa.xlsx","url":"url2","uid":1721353187096,"status":"success"}]
-    })
+    # dealWf('A02226','部门总审核',"通过",{"passed":"false"
+    #     ,"attachments":[{"name":"flowTime.png","url":"url1","uid":1721353181741,"status":"success"},
+    #     {"name":"flowAaaa.xlsx","url":"url2","uid":1721353187096,"status":"success"}]
+    # })
 
-    dealWf('A04955','安监',"ok",{})
+    # dealWf('A04955','安监',"ok",{"passed":"true"})
+    # dealWf('A04847','发起自查',"ok")
     #
+
+    # dealWf('A04950','申请人处理退回',"ok",{"planName":"测试修改计划名称"})
+
     # sqr A03383
-    # dealWf('A03383','发起者填写结果并归档',"ok",{"implResultList":[
-    #     {"id":1828614231976697857,"implResult":"implResult001","attachments":[{"name":"implResulttime1.png","url":"url1"},{"name":"implResultaaaa1.xlsx","url":"url2"}]}
-    #     # ,{"id":1825779965806796801,"implResult":"implResult002","attachments":[{"name":"implResulttime2.png","url":"url2"},{"name":"implResultaaaa2.xlsx","url":"url2"}]}
-    # ]})
+    dealWf('A04847','发起者填写结果并归档',"ok",{"passed":"true","implResultList":[
+        {"id":1828614231976697857,"implResult":"implResult001","attachments":[{"name":"implResulttime1.png","url":"url1"},{"name":"implResultaaaa1.xlsx","url":"url2"}]}
+        ,{"id":1825779965806796801,"implResult":"implResult002","attachments":[{"name":"implResulttime2.png","url":"url2"},{"name":"implResultaaaa2.xlsx","url":"url2"}]}
+    ]})
 
 def commitCheckResult():
     return c.ppost("/asi/self/inspection/commitCheckResult",{"implResultList":[
@@ -160,9 +186,10 @@ def downExcel(fileName="fdzc.xlsx"):
 def test():
     # c.pget("/sys/position/findUsersByPositionId?id=14")
     # c.ppost("/sys/user/position/manage/batchAdd",{"positionId":10,"userId":1010,"deptIdList":[1]})
-    c.ppost("/processInst/findProcessManage",{"pageSize":15,"pageNum":1,"currentAssigneeNameOrEno":"A01933"})
+    # c.ppost("/processInst/findProcessManage",{"pageSize":15,"pageNum":1,"currentAssigneeNameOrEno":"A01933"})
     # c.ppost("/processInst/findTaskAssigeeeUpdateLog",{"pageSize":10,"pageNum":1,"procInstId":"00276f06-6f22-11ef-99b3-0050569cb713"})
     # c.ppost("/processInst/updateTaskAssigeee",{"taskIdList":["46f5cdeb-6f22-11ef-99b3-0050569cb713","e549ee7b-725c-11ef-b6b8-005056c00001"],"afterContent":"1001"})
+    c.pget("/sys/department/getLocalDepartmentTree")
 
 # funs="init"
 # funs="add"

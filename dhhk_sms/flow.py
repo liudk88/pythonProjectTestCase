@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
+# sys.path.append(str(Path(__file__).resolve().parent.parent))
 sys.path.append(str(Path(__file__).resolve().parent.parent))
+sys.path.append("../../..")
 import common as c
 import login
 
@@ -33,7 +35,11 @@ def dealWf(username,currentStepName,postData):
 def dealWfWithHeader(username,currentStepName,postData,header):
     print("当前流程环节:"+currentStepName+"，"+username+" to do!")
     req=c.post("/asi/inform/auditApply",postData,header)
+    
+    # 法定自查
     # req=c.post("/asi/self/inspection/auditApply",postData,header)
+    # req=c.post("/asi/self/inspection/auditApplyWithUpdate",postData,header)
+    
     # req=c.post("/asi/self/inspection/org/deal",postData,header)
     # req=c.post("/asi/inform/auditApplyWithUpdate",postData,header)
     code=req.json()['code']

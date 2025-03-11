@@ -1,0 +1,73 @@
+# 机组用车相关接口测试
+- id: "crew_add"
+  title: "新增机组用车"
+  url: "/vehicle/order/crewtask/add"
+  type: "post"
+  params:
+    flightNumber: "CZ3456"
+    location: "sz"
+    plannedDepartureTime: "2024-03-14 10:30:00"
+    departurePlace: "T3航站楼"
+    driverId: 176
+    useVehicleLocation: "sz"  # 深圳
+    userNumber: 2
+    crewLocationPlace: "机组接送地点"
+    taskDescription: "机组接送任务"
+  format_response: false  # 不格式化响应
+  save:
+    orderId: "$.data"
+
+- id: "crew_edit"
+  title: "编辑机组用车"
+  url: "/vehicle/order/crewtask/edit"
+  type: "post"
+  params:
+    orderId: "${orderId}"  # 使用当前组的变量
+    # 或者明确指定组
+    # orderId: "${task_order.orderId}"
+    flightNumber: "CZ3456-Edit"
+    plannedDepartureTime: "2024-03-14 10:30:00"
+    departurePlace: "T3航站楼-edit"
+    driverId: 176
+    useVehicleLocation: "sz-edit"
+    userNumber: 3
+    crewLocationPlace: "机组接送地点-edit"
+    taskDescription: "机组接送任务-edit"
+  format_response: false
+  save:
+    orderId: "$.data"
+
+- id: "crew_info"
+  title: "查看机组用车详情"
+  send: 1
+  url: "/vehicle/order/${orderId}"
+  type: "get"
+  format_response: true  # 格式化响应
+
+- id: "crew_query"
+  title: "查询机组用车"
+  url: "/vehicle/order/task/list"
+  params:
+    orderType: 3
+  type: "post"
+  format_response: true  # 格式化响应
+
+- id: "crew_query_driver"
+  title: "查询司机的订单"
+  url: "/vehicle/order/task/listDriverOrder"
+  params:
+    orderType: 1
+  type: "post"
+  format_response: true  # 格式化响应
+
+- id: "crew_cancel"
+  title: "取消机组用车"
+  url: "/vehicle/order/${orderId}/cancelVehicle"
+  type: "get"
+  format_response: false  # 格式化响应
+
+- id: "crew_exp"
+  title: "导出机组用车"
+  url: "/vehicle/order/crewtask/export"
+  file_save_dir: "/home/liudk/Downloads/机组用车.xlsx"
+  type: "download_post"

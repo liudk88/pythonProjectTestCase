@@ -1,0 +1,119 @@
+# 测试配置文件
+- path: "dhhk_vehicle/order_debug.yaml"
+  name: "用车管理全局接口测试"
+  enabled: true  # 是否启用此文件
+  request_groups:  # 多组测试请求
+    - name: "调试"
+      requests:
+        - "order_query"
+
+- path: "dhhk_vehicle/commuter_order_debug.yaml"
+  name: "通勤用车测试"
+  # enabled: true  # 是否启用此文件
+  request_groups:  # 多组测试请求
+    - name: "新增并查看"  # 第一组：新增+查看
+      requests:
+        # - "commuter_query"
+        # - "commuter_exp"
+        - "commuter_add"
+        - "commuter_info"
+    # - name: "编辑并查看"  # 第二组：编辑+查看
+    #   requests:
+    #     - "commuter_edit"
+    #     - "commuter_info"
+
+- path: "dhhk_vehicle/apron_order_debug.yaml"
+  name: "机坪用车测试"
+  # enabled: true 
+  request_groups:
+    - name: "调试"
+      requests:
+        # - "apron_add"
+    #     - "apron_cancel"
+    #     - "apron_edit"
+    #     - "apron_info"
+        - "apron_query"
+        # - "apron_exp"
+    # - name: "新增并查看"  # 第一组：新增+查看
+    #   requests:
+    #     - "apron_add"
+    #     - "apron_info"
+    # - name: "编辑并查看"  # 第二组：编辑+查看
+    #   requests:
+    #     - "apron_edit"
+    #     - "apron_info"
+
+
+- path: "dhhk_vehicle/crew_order_debug.yaml"
+  name: "机组用车测试"
+  # enabled: true 
+  request_groups:
+    - name: "调试"
+      requests:
+    #     - "crew_add"
+        # - "crew_cancel"
+    #     - "crew_edit"
+        # - "crew_info"
+        # - "crew_query"
+        # - "crew_exp"
+    # - name: "新增并查看"  # 第一组：新增+查看
+    #   requests:
+    #     - "crew_add"
+    #     - "crew_info"
+    # - name: "编辑并查看"  # 第二组：编辑+查看
+    #   requests:
+    #     - "crew_edit"
+    #     - "crew_info"
+- path: "dhhk_vehicle/administration_order_debug.yaml"
+  name: "行政用车测试"
+  # enabled: true 
+  request_groups:
+    # - name: "调试"
+    #   requests:
+        # - "administration_add"
+    #     - "administration_cancel"
+    #     - "administration_edit"
+    #     - "administration_info"
+        # - "administration_query"
+        # - "administration_exp"
+    - name: "新增并查看"  # 第一组：新增+查看
+      requests:
+        - "administration_add"
+        - "administration_info"
+    # - name: "编辑并查看"  # 第二组：编辑+查看
+    #   requests:
+    #     - "administration_edit"
+    #     - "administration_info"
+
+
+- path: "dhhk_vehicle/task_order_debug.yaml"
+  name: "任务用车测试"
+  # enabled: true 
+  request_groups:
+    - name: "调试"
+      requests:
+        # - "task_query_driver"
+        # - "task_query"
+        # - "task_query_driver"
+        - "task_start"
+        # - "task_end"
+
+- path: "ynwxb/asset/systemPortrait_debug.yaml"
+  name: "信息系统画像测试"
+  # enabled: true 
+  request_groups:
+    - name: "调试"
+      requests:
+        # - "systemPortrait_downLoadTemplate"
+        - "systemPortrait_exp"
+        # - "systemPortrait_imp"
+
+- path: "test_debug.yaml"
+  name: "测试"
+  # enabled: true 
+  request_groups:
+    - name: "调试"
+      requests:
+        # - "testGet"
+        - "testPost"
+        # - "testDownload"

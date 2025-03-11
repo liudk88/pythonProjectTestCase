@@ -1,0 +1,8 @@
+# 用车管理全局相关接口测试
+- id: "order_query"
+  title: "查询通勤用车"
+  url: "/vehicle/order/list"
+  params:
+    pageSize: 3
+  type: "post"
+  format_response: true  # 格式化响应

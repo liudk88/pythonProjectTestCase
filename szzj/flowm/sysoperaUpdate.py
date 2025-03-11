@@ -1,25 +1,28 @@
 #  ===> 应用更新流程 <===
 import flowm
 import sys
+# from pathlib import Path
+
+# sys.path.append(str(Path(__file__).resolve().parent.parent))
 sys.path.append("../..")
 import common as c
 
-print('==> 调试 应用更新流程 <===')
+print("==> 调试 应用更新流程 <===")
 
-testData=flowm.getData()
-gt_flowId=testData['update_flowSeq']
-gt_csflowId=testData['testResource_flowSeq']
-gt_newSysName="ldktestSys_"+gt_csflowId #根据当前测试资源申请生成新的信息系统名称
+testData = flowm.getData()
+gt_flowId = testData["update_flowSeq"]
+gt_csflowId = testData["testResource_flowSeq"]
+gt_newSysName = "ldktestSys_" + gt_csflowId  # 根据当前测试资源申请生成新的信息系统名称
 
 
 def getSystemByName(sysname):
-    req=c.get("/view/AssetView-BS/view?flag=1&SYS_NAME="+sysname)
-    assert len(req.json()['data']['datas'])==1,('没有找到信息系统:'+sysname)
-    return req.json()['data']['datas'][0]
+    req = c.get("/view/AssetView-BS/view?flag=1&SYS_NAME=" + sysname)
+    assert len(req.json()["data"]["datas"]) == 1, "没有找到信息系统:" + sysname
+    return req.json()["data"]["datas"][0]
 
 
 # 提交应用更新申请
-def apply(flowSeq,sysname,systemId,projectName,fileToken):
+def apply(flowSeq, sysname, systemId, projectName, fileToken):
     data = {
         "pkv": flowSeq,
         "MSG_SYSTEM": sysname,
@@ -40,12 +43,16 @@ def apply(flowSeq,sysname,systemId,projectName,fileToken):
         "assignees": "12",
         "nextStep": "nodeBAudit",
         "bsFormId": "Form20221Q0V7Z10002",
-        "sendSms": "1"
+        "sendSms": "1",
     }
-    c.ppost("/wf/sysoperaUpdate/startProcess",data)
+    c.ppost("/wf/sysoperaUpdate/startProcess", data)
 
-def dealWf(username,currentStepName,dealFormData):
-    flowm.dealWf(username,currentStepName,gt_flowId,"Form20221Q0V7Z10002",dealFormData)
+
+def dealWf(username, currentStepName, dealFormData):
+    flowm.dealWf(
+        username, currentStepName, gt_flowId, "Form20221Q0V7Z10002", dealFormData
+    )
+
 
 # 上传系统更新包
 # projectName="nisg"
@@ -54,7 +61,7 @@ def dealWf(username,currentStepName,dealFormData):
 # c.post_file_req("/attachment/upload",files,{"fileToken":fileToken})
 
 # <=  应用更新申请  =>
-# apply(gt_flowId,"XC-运维管理平台","1024620751153528832","nisg",gt_flowId+"FLOWM")
+apply(gt_flowId, "XC-运维管理平台", "1024620751153528832", "nisg", gt_flowId + "FLOWM")
 
 
 #  <=  流程处理  =>
@@ -72,32 +79,14 @@ def dealWf(username,currentStepName,dealFormData):
 # dealWf("pengxj","馆领导审批",{"DEAL_OPT":"同意","nextStep": "nodeUpdate"})
 
 ## ==============
-dealWf("xiangdk","系统更新部署",{"DEAL_OPT":"已经更新完成，请检查结果，并确认。","nextStep": "nodeConfirm"})
+dealWf(
+    "xiangdk",
+    "系统更新部署",
+    {"DEAL_OPT": "已经更新完成，请检查结果，并确认。", "nextStep": "nodeConfirm"},
+)
 ## ----
 # dealWf("xiangdk","系统更新部署",{"DEAL_OPT":"应用更新完成，请检查结果，并确认，转发给服务器管理员。","nextStep": "serverConfig"})
 # dealWf("xuyl","系统更新部署",{"DEAL_OPT":"服务器配置更新完成，请检查结果。","nextStep": "nodeConfirm"})
 ## ==============
 
 # dealWf("liudk","确认更新结果",{"DEAL_OPT":"确认更新成功","nextStep": "endEvent"})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

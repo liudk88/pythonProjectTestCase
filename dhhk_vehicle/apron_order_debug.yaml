@@ -1,0 +1,82 @@
+# 机坪用车相关接口测试
+- id: "apron_add"
+  title: "新增机坪用车"
+  url: "/vehicle/order/aprontask/add"
+  type: "post"
+  params:
+    flightNumber: "CZ3456"
+    plannedDepartureTime: "2024-03-14 10:30:00"
+    departurePlace: "T3航站楼"
+    useVehicleLocation: "sz"  # 深圳
+    userNumber: 2
+    apronLocation: "301机位"
+    gateNumber: "301"
+    inboundOutbound: "I"  # 进港
+    userInfo: "张机长"
+    contactInfo: "13800138000"
+    taskDescription: "机组接送任务"
+    needVehicleType: "轿车"
+    remark: "这是一条机坪用车申请单"
+  format_response: false  # 不格式化响应
+  save:
+    orderId: "$.data"
+
+- id: "apron_edit"
+  title: "编辑机坪用车"
+  url: "/vehicle/order/aprontask/edit"
+  type: "post"
+  params:
+    orderId: "${orderId}"  # 使用当前组的变量
+    # 或者明确指定组
+    # orderId: "${task_order.orderId}"
+    orderType: "1"
+    driverId: 176
+    flightNumber: "CZ3456-Edit"
+    plannedDepartureTime: "2025-03-14 11:30:00"
+    departurePlace: "T3航站楼"
+    useVehicleLocation: "gz"
+    userNumber: 3
+    apronLocation: "302机位"
+    gateNumber: "302"
+    inboundOutbound: "O"  # 改为出港
+    taskDescription: "机组接送任务-已修改"
+    vehicleType: "轿车"
+    remark: "这是一条修改后的机坪用车申请单"
+  format_response: false
+  save:
+    orderId: "$.data"
+
+- id: "apron_info"
+  title: "查看机坪用车详情"
+  send: 1
+  url: "/vehicle/order/${orderId}"
+  type: "get"
+  format_response: true  # 格式化响应
+
+- id: "apron_query"
+  title: "查询机坪用车"
+  url: "/vehicle/order/task/list"
+  params:
+    orderType: 1
+  type: "post"
+  format_response: true  # 格式化响应
+
+- id: "apron_query_driver"
+  title: "查询司机的订单"
+  url: "/vehicle/order/task/listDriverOrder"
+  params:
+    orderType: 1
+  type: "post"
+  format_response: true  # 格式化响应
+
+- id: "apron_cancel"
+  title: "取消机坪用车"
+  url: "/vehicle/order/${orderId}/cancelVehicle"
+  type: "get"
+  format_response: false  # 格式化响应
+
+- id: "apron_exp"
+  title: "导出机坪用车"
+  url: "/vehicle/order/aprontask/export"
+  file_save_dir: "/home/liudk/Downloads/机坪用车.xlsx"
+  type: "download_post"

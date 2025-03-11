@@ -1,0 +1,27 @@
+# 信息系统画像相关接口测试
+
+- id: "testGet"
+  title: "测试get"
+  # url: "/view/FView-DT/view?current=1&size=10&viewId=FView-DT"
+  # ynwxb 工作台 处理（信息系统核查）
+  url: "/ynwxb/asset/view/assetCheckOrgTask?workId=7777744162508800"
+  type: "get"
+  format_response: true  # 不格式化响应
+
+- id: "testPost"
+  title: "测试post"
+  url: "/ynwxb/asset/view/commitList?workId=7777744162508800&scopeId=7777744165326848&page=1&limit=10"
+  # params:
+    # workId: "7777744162508800"
+    # scopeId: "7777744165326848"
+    # page: 1
+    # limit: 10
+  type: "post"
+  format_response: true  # 格式化响应
+
+- id: "testDownload"
+  title: "测试下载"
+  url: "/view/exportInvaildDatas/2298F685CC6546E08B9ECF8FD65CDE27"
+  file_save_dir: "/home/liudk/Downloads/测试错误数据.xlsx"
+  type: "download_get"
+

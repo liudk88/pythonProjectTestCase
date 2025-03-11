@@ -1,0 +1,24 @@
+# 任务用车相关接口测试
+- id: "task_query"
+  title: "查询任务用车"
+  url: "/vehicle/order/task/list"
+  type: "post"
+  format_response: true  # 格式化响应
+
+- id: "task_query_driver"
+  title: "查询司机的订单"
+  url: "/vehicle/order/task/listDriverOrder"
+  params:
+    orderStatus: 0
+  type: "post"
+  format_response: true  # 格式化响应
+
+- id: "task_start"
+  title: "出发保障用车"
+  url: "/vehicle/order/task/${orderId}/start?startKm=2.5"
+  type: "get"
+
+- id: "task_end"
+  title: "确认行程结束"
+  url: "/vehicle/order/task/${orderId}/confirmEnd?endKm=5"
+  type: "get"

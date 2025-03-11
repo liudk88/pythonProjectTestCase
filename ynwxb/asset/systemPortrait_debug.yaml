@@ -1,0 +1,20 @@
+# 信息系统画像相关接口测试
+
+- id: "systemPortrait_downLoadTemplate"
+  title: "下载模板"
+  url: "/ynwxb/asset/view/systemPortrait/dowmLoadTemplate"
+  file_save_dir: "/home/liudk/Downloads/信息系统画像导入模板.xlsx"
+  type: "download_get"
+
+
+- id: "systemPortrait_exp"
+  title: "导出信息系统画像数据"
+  url: "/ynwxb/asset/view/systemPortrait/exp"
+  file_save_dir: "/home/liudk/Downloads/信息系统画像-导出数据.xlsx"
+  type: "download_get"
+
+- id: "systemPortrait_imp"
+  title: "导入信息系统画像数据"
+  url: "/ynwxb/asset/view/systemPortrait/imp"
+  upload_file: "/home/liudk/Downloads/信息系统画像-导入数据.xlsx"
+  type: "upload"
